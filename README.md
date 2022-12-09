@@ -15,10 +15,10 @@
 |-------------|------------------|
 | 1.0-3.0.0   | 适配 SpringBoot3.x |
 
-```xml
 
+```xml
 <dependency>
-    <groupId>me.dwliu.lab</groupId>
+    <groupId>me.dwliu.framework</groupId>
     <artifactId>oss-spring-boot-starter</artifactId>
     <version>${lastVersion}</version>
 </dependency>
