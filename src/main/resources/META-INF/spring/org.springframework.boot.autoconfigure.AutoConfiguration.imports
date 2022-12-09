@@ -1,0 +1,4 @@
+me.dwliu.framework.oss.autoconfigure.OssAutoConfiguration
+me.dwliu.framework.oss.autoconfigure.MinioOssAutoConfiguration
+me.dwliu.framework.oss.autoconfigure.QiniuOssAutoConfiguration
+me.dwliu.framework.oss.autoconfigure.AliyunOssAutoConfiguration

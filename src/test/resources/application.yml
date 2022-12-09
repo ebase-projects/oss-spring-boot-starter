@@ -1,0 +1,36 @@
+oss:
+  prefix: p
+  minio:
+    enabled: true
+    endpoint: http://xxx:9000
+    accessKey: test
+    secretKey: ff4df647-64d6-45ec-8cd3-45f3a6d82620
+    bucketName: image
+
+
+
+#oss:
+#  minio:
+#    enabled: true
+#    bucketName: ceshi
+#    endpoint:
+#    accessKey:
+#    secretKey:
+#  aliyun:
+#    enabled: true
+#  qiniu:
+#    enabled: true
+#    endpoint: XXX
+#    accessKey: XXX
+#    secretKey: XXX
+#    zone: z0
+server:
+  port: 18080
+  tomcat:
+    max-swallow-size: -1
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 200MB

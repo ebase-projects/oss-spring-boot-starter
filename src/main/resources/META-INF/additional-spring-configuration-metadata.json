@@ -1,0 +1,37 @@
+{
+  "properties": [
+    {
+      "name": "oss.prefix",
+      "type": "java.lang.String",
+      "description": "前缀"
+    },
+    {
+      "name": "oss.minio.endpoint",
+      "type": "java.lang.String",
+      "description": "绑定的域名"
+    },
+    {
+      "name": "oss.minio.accessKey",
+      "type": "java.lang.String",
+      "description": "ACCESS_KEY"
+    },
+    {
+      "name": "oss.minio.secretKey",
+      "type": "java.lang.String",
+      "description": "SECRET_KEY"
+    },
+    {
+      "name": "oss.minio.bucketName",
+      "type": "java.lang.String",
+      "description": "存储空间名",
+      "defaultValue": "default"
+    },
+    {
+      "name": "oss.minio.enabled",
+      "type": "java.lang.Boolean",
+      "description": "是否开启minio",
+      "defaultValue": "false"
+    }
+  ]
+}
+
