@@ -56,7 +56,7 @@ public class QiniuOssTemplateTest {
 
     @Test
     public void statFile() {
-        FileInfo fileInfo = qiniuOssTemplate.statFile("blog", "image/20191107144801-GpeJ9K.png");
+        FileInfo fileInfo = qiniuOssTemplate.getStatFile("blog", "image/20191107144801-GpeJ9K.png");
         log.info("fileInfo:" + fileInfo);
     }
 
@@ -66,7 +66,7 @@ public class QiniuOssTemplateTest {
 
     @Test
     public void filePath() {
-        String s = qiniuOssTemplate.filePath(fileName);
+        String s = qiniuOssTemplate.getFileRelativePath(fileName);
         log.info(s);
     }
 
@@ -76,7 +76,7 @@ public class QiniuOssTemplateTest {
 
     @Test
     public void fileUrl() {
-        String s = qiniuOssTemplate.fileUrl(fileName);
+        String s = qiniuOssTemplate.getFileFullUrl(fileName);
         log.info(s);
     }
 
@@ -115,7 +115,7 @@ public class QiniuOssTemplateTest {
 
         File file = new File(filePath);
         FileInputStream fileInputStream = new FileInputStream(file);
-        String fileName = ossRule.fileName(this.fileName, OssFileNameFormatEnum.UUID);
+        String fileName = ossRule.setFileName(this.fileName, OssFileNameFormatEnum.UUID);
 
         FileInfo fileInfo = qiniuOssTemplate.putFile("2019/11/" + fileName, fileInputStream);
         log.info(fileInfo.toString());

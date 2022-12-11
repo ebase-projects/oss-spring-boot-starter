@@ -15,6 +15,21 @@ import java.util.List;
 public interface OssWithBucketTemplate extends OssTemplate {
 
 	/**
+	 * 根据规则生成存储桶名称规则
+	 *
+	 * @return String
+	 */
+	String getBucketName();
+
+	/**
+	 * 根据规则生成存储桶名称规则
+	 *
+	 * @param bucketName 存储桶名称
+	 * @return String
+	 */
+	String getBucketName(String bucketName);
+
+	/**
 	 * 创建存储桶
 	 *
 	 * @param bucketName 存储桶名称
@@ -63,7 +78,7 @@ public interface OssWithBucketTemplate extends OssTemplate {
 	 * @param fileName   文件名称
 	 * @return
 	 */
-	FileInfo statFile(String bucketName, String fileName);
+	FileInfo getStatFile(String bucketName, String fileName);
 
 	/**
 	 * 获取文件相对路径
@@ -72,7 +87,7 @@ public interface OssWithBucketTemplate extends OssTemplate {
 	 * @param fileName   文件名称
 	 * @return
 	 */
-	String filePath(String bucketName, String fileName);
+	String getFileRelativePath(String bucketName, String fileName);
 
 	/**
 	 * 获取文件地址
@@ -81,8 +96,18 @@ public interface OssWithBucketTemplate extends OssTemplate {
 	 * @param fileName   文件名称
 	 * @return
 	 */
-	String fileUrl(String bucketName, String fileName);
+	String getFileFullUrl(String bucketName, String fileName);
 
+	/**
+	 * 上传文件
+	 *
+	 * @param bucketName
+	 * @param originFileName
+	 * @param fileName
+	 * @param stream
+	 * @param contentType
+	 * @return
+	 */
 	FileInfo putFile(String bucketName, String originFileName, String fileName, InputStream stream, String contentType);
 
 	/**
@@ -133,18 +158,4 @@ public interface OssWithBucketTemplate extends OssTemplate {
 	void removeFiles(String bucketName, List<String> fileNames);
 
 
-	/**
-	 * 根据规则生成存储桶名称规则
-	 *
-	 * @return String
-	 */
-	String getBucketName();
-
-	/**
-	 * 根据规则生成存储桶名称规则
-	 *
-	 * @param bucketName 存储桶名称
-	 * @return String
-	 */
-	String getBucketName(String bucketName);
 }

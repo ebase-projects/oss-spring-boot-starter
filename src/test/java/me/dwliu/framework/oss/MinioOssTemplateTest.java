@@ -66,7 +66,7 @@ public class MinioOssTemplateTest {
 
 	@Test
 	public void filePath() {
-		String s = minioOssTemplate.filePath(fileName);
+		String s = minioOssTemplate.getFileRelativePath(fileName);
 		log.info(s);
 	}
 
@@ -76,7 +76,7 @@ public class MinioOssTemplateTest {
 
 	@Test
 	public void fileUrl() {
-		String s = minioOssTemplate.fileUrl(fileName);
+		String s = minioOssTemplate.getFileFullUrl(fileName);
 		log.info(s);
 	}
 
@@ -117,7 +117,7 @@ public class MinioOssTemplateTest {
 		FileInputStream fileInputStream = new FileInputStream(file);
 		String originFileName = this.fileName;
 		// String fileName = ossRule.fileName(this.fileName, OssFileNameFormatEnum.DATETIME);
-		String fileName = ossRule.fileName(this.fileName, OssFileNameFormatEnum.DATE);
+		String fileName = ossRule.setFileName(this.fileName, OssFileNameFormatEnum.DATE);
 
 		FileInfo fileInfo = minioOssTemplate.putFile(bucketName, originFileName, fileName, fileInputStream);
 		log.info(fileInfo.toString());

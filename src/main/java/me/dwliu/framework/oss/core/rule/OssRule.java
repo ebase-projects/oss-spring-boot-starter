@@ -1,6 +1,5 @@
 package me.dwliu.framework.oss.core.rule;
 
-
 import me.dwliu.framework.oss.core.enums.OssFileNameFormatEnum;
 
 /**
@@ -26,7 +25,7 @@ public interface OssRule {
 	 * @param format       文件前缀格式
 	 * @return
 	 */
-	String fileName(String originalName, OssFileNameFormatEnum format);
+	String setFileName(String originalName, OssFileNameFormatEnum format);
 
 
 }

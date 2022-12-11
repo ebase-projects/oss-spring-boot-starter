@@ -20,7 +20,7 @@ public interface OssTemplate {
 	 * @param fileName 文件名称
 	 * @return
 	 */
-	FileInfo statFile(String fileName);
+	FileInfo getStatFile(String fileName);
 
 	/**
 	 * 获取文件相对路径
@@ -28,7 +28,7 @@ public interface OssTemplate {
 	 * @param fileName 文件名称
 	 * @return
 	 */
-	String filePath(String fileName);
+	String getFileRelativePath(String fileName);
 
 	/**
 	 * 获取文件地址
@@ -36,7 +36,7 @@ public interface OssTemplate {
 	 * @param fileName 文件名称
 	 * @return
 	 */
-	String fileUrl(String fileName);
+	String getFileFullUrl(String fileName);
 
 	/**
 	 * 上传文件
@@ -50,8 +50,8 @@ public interface OssTemplate {
 	/**
 	 * 上传文件
 	 *
-	 * @param file
-	 * @param contentType
+	 * @param file        上传文件
+	 * @param contentType 类型
 	 * @return
 	 */
 	FileInfo putFile(MultipartFile file, String contentType);
@@ -73,6 +73,14 @@ public interface OssTemplate {
 	 */
 	FileInfo putFile(String fileName, MultipartFile file);
 
+	/**
+	 * 上传文件
+	 *
+	 * @param fileName    文件名称
+	 * @param file        上传文件
+	 * @param contentType 类型
+	 * @return
+	 */
 	FileInfo putFile(String fileName, MultipartFile file, String contentType);
 
 	/**

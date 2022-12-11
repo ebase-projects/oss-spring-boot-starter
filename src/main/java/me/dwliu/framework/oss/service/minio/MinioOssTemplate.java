@@ -36,13 +36,30 @@ public class MinioOssTemplate implements OssWithBucketTemplate {
 		this.ossRule = ossRule;
 	}
 
+	/**
+	 * 根据规则生成存储桶名称规则
+	 *
+	 * @return String
+	 */
+	public String getBucketName() {
+		return getBucketName(bucketName);
+	}
+
+	/**
+	 * 根据规则生成存储桶名称规则
+	 *
+	 * @param bucketName 存储桶名称
+	 * @return String
+	 */
+	public String getBucketName(String bucketName) {
+		return ossRule.bucketName(bucketName);
+	}
+
 	@Override
 	@SneakyThrows
 	public void makeBucket(String bucketName) {
 		this.bucketName = bucketName;
 		if (!bucketExists(getBucketName(bucketName))) {
-			//minioClient.makeBucket(getBucketName(bucketName));
-			//minioClient.setBucketPolicy(getBucketName(bucketName), getPolicyType(getBucketName(bucketName), PolicyTypeEnum.READ));
 			minioClient.makeBucket(MakeBucketArgs.builder()
 				.bucket(getBucketName(bucketName))
 				.build());
@@ -91,18 +108,18 @@ public class MinioOssTemplate implements OssWithBucketTemplate {
 
 	@Override
 	@SneakyThrows
-	public FileInfo statFile(String bucketName, String fileName) {
+	public FileInfo getStatFile(String bucketName, String fileName) {
 		StatObjectResponse objectStat = minioClient.statObject(StatObjectArgs.builder().bucket(getBucketName(bucketName)).object(fileName).build());
 
 		FileInfo fileInfo = new FileInfo();
 		fileInfo.setFileName(StringUtils.isBlank(objectStat.object()) ? fileName : objectStat.object());
 
 		if (StringUtils.isBlank(bucketName)) {
-			fileInfo.setFileUrl(filePath(fileInfo.getFileName()));
-			fileInfo.setFileHostUrl(fileUrl(fileInfo.getFileName()));
+			fileInfo.setFileUrl(getFileRelativePath(fileInfo.getFileName()));
+			fileInfo.setFileHostUrl(getFileFullUrl(fileInfo.getFileName()));
 		} else {
-			fileInfo.setFileUrl(filePath(bucketName, fileInfo.getFileName()));
-			fileInfo.setFileHostUrl(fileUrl(bucketName, fileInfo.getFileName()));
+			fileInfo.setFileUrl(getFileRelativePath(bucketName, fileInfo.getFileName()));
+			fileInfo.setFileHostUrl(getFileFullUrl(bucketName, fileInfo.getFileName()));
 		}
 
 		fileInfo.setHash(String.valueOf(objectStat.hashCode()));
@@ -113,26 +130,26 @@ public class MinioOssTemplate implements OssWithBucketTemplate {
 	}
 
 	@Override
-	public FileInfo statFile(String fileName) {
-		return statFile(getBucketName(), fileName);
+	public FileInfo getStatFile(String fileName) {
+		return getStatFile(getBucketName(), fileName);
 	}
 
 	@Override
-	public String filePath(String bucketName, String fileName) {
+	public String getFileRelativePath(String bucketName, String fileName) {
 		return getBucketName(bucketName)
 			.concat("/")
 			.concat(fileName);
 	}
 
 	@Override
-	public String filePath(String fileName) {
+	public String getFileRelativePath(String fileName) {
 		return getBucketName()
 			.concat("/")
 			.concat(fileName);
 	}
 
 	@Override
-	public String fileUrl(String bucketName, String fileName) {
+	public String getFileFullUrl(String bucketName, String fileName) {
 		return endpoint
 			.concat("/")
 			.concat(getBucketName(bucketName))
@@ -141,7 +158,7 @@ public class MinioOssTemplate implements OssWithBucketTemplate {
 	}
 
 	@Override
-	public String fileUrl(String fileName) {
+	public String getFileFullUrl(String fileName) {
 		return endpoint
 			.concat("/")
 			.concat(getBucketName())
@@ -157,27 +174,32 @@ public class MinioOssTemplate implements OssWithBucketTemplate {
 		if (StringUtils.isBlank(originFileName)) {
 			originFileName = fileName;
 		}
-
 		// 提前获取文件大小
 		long available = (long) stream.available();
+		minioClient.putObject(PutObjectArgs.builder()
+			.bucket(getBucketName(bucketName))
+			.object(fileName)
+			.stream(stream, stream.available(), -1)
+			.contentType(contentType)
+			.build());
 
-		//minioClient.putObject(getBucketName(bucketName), fileName, stream, available, null, null, "application/octet-stream");
-		minioClient.putObject(PutObjectArgs.builder().bucket(getBucketName(bucketName)).object(fileName).stream(stream, stream.available(), -1).contentType(contentType).build());
 
 		FileInfo fileInfo = new FileInfo();
+
 		fileInfo.setFileName(fileName);
 		fileInfo.setOriginalName(originFileName);
 		if (StringUtils.isBlank(bucketName)) {
-			fileInfo.setFileUrl(filePath(fileName));
-			fileInfo.setFileHostUrl(fileUrl(fileName));
+			fileInfo.setFileUrl(getFileRelativePath(fileName));
+			fileInfo.setFileHostUrl(getFileFullUrl(fileName));
 		} else {
-			fileInfo.setFileUrl(filePath(bucketName, fileName));
-			fileInfo.setFileHostUrl(fileUrl(bucketName, fileName));
+			fileInfo.setFileUrl(getFileRelativePath(bucketName, fileName));
+			fileInfo.setFileHostUrl(getFileFullUrl(bucketName, fileName));
 		}
 
 		fileInfo.setFileSize(available);
 		fileInfo.setFileExtension(FilenameUtils.getExtension(fileName));
 		fileInfo.setUploadDate(LocalDateTime.now());
+		fileInfo.setContentType(contentType);
 
 		return fileInfo;
 	}
@@ -255,39 +277,6 @@ public class MinioOssTemplate implements OssWithBucketTemplate {
 		Stream<DeleteObject> stream = fileNames.stream().map(DeleteObject::new);
 		minioClient.removeObjects(RemoveObjectsArgs.builder().bucket(getBucketName(bucketName)).objects(stream::iterator).build());
 	}
-
-	/**
-	 * 根据规则生成存储桶名称规则
-	 *
-	 * @return String
-	 */
-	public String getBucketName() {
-		return getBucketName(bucketName);
-	}
-
-	/**
-	 * 根据规则生成存储桶名称规则
-	 *
-	 * @param bucketName 存储桶名称
-	 * @return String
-	 */
-	public String getBucketName(String bucketName) {
-		return ossRule.bucketName(bucketName);
-	}
-//
-//    /**
-//     * 根据规则生成文件名称
-//     *
-//     * @param fileName 文件名称
-//     * @return String
-//     */
-//    private String getFileName(String fileName) {
-//        return ossRule.fileName(fileName, OssFileNameFormatEnum.NONE);
-//    }
-//
-//    private String getFileName(String fileName, OssFileNameFormatEnum format) {
-//        return ossRule.fileName(fileName, format);
-//    }
 
 	/**
 	 * 获取存储桶策略

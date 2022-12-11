@@ -61,11 +61,11 @@ public class AliyunOssTemplate implements OssWithBucketTemplate {
 	}
 
 	@Override
-	public FileInfo statFile(String bucketName, String fileName) {
+	public FileInfo getStatFile(String bucketName, String fileName) {
 		ObjectMetadata stat = ossClient.getObjectMetadata(bucketName, fileName);
 		FileInfo fileInfo = new FileInfo();
 		fileInfo.setFileName(fileName);
-		fileInfo.setFileUrl(fileUrl(fileInfo.getFileName()));
+		fileInfo.setFileUrl(getFileFullUrl(fileInfo.getFileName()));
 		fileInfo.setHash(stat.getContentMD5());
 		fileInfo.setFileSize(stat.getContentLength());
 		//fileInfo.setUploadDate(stat.getLastModified());
@@ -74,12 +74,12 @@ public class AliyunOssTemplate implements OssWithBucketTemplate {
 	}
 
 	@Override
-	public FileInfo statFile(String fileName) {
-		return statFile(getBucketName(), fileName);
+	public FileInfo getStatFile(String fileName) {
+		return getStatFile(getBucketName(), fileName);
 	}
 
 	@Override
-	public String filePath(String bucketName, String fileName) {
+	public String getFileRelativePath(String bucketName, String fileName) {
 		String bucketNameTmp = "";
 		if (org.apache.commons.lang3.StringUtils.isBlank(bucketName)) {
 			bucketNameTmp = getBucketName();
@@ -94,12 +94,12 @@ public class AliyunOssTemplate implements OssWithBucketTemplate {
 	}
 
 	@Override
-	public String filePath(String fileName) {
-		return filePath(null, fileName);
+	public String getFileRelativePath(String fileName) {
+		return getFileRelativePath(null, fileName);
 	}
 
 	@Override
-	public String fileUrl(String bucketName, String fileName) {
+	public String getFileFullUrl(String bucketName, String fileName) {
 		return null;
 	}
 
@@ -123,7 +123,7 @@ public class AliyunOssTemplate implements OssWithBucketTemplate {
 	}
 
 	@Override
-	public String fileUrl(String fileName) {
+	public String getFileFullUrl(String fileName) {
 		return null;
 	}
 
@@ -231,7 +231,7 @@ public class AliyunOssTemplate implements OssWithBucketTemplate {
 		FileInfo fileInfo = new FileInfo();
 		fileInfo.setFileName(key);
 		fileInfo.setOriginalName(key);
-		fileInfo.setFileUrl(fileUrl(key));
+		fileInfo.setFileUrl(getFileFullUrl(key));
 		//fileInfo.setFileSize();
 		//fileInfo.setUploadDate(new Date());
 		return fileInfo;

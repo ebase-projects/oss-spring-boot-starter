@@ -90,11 +90,11 @@ public class QiniuOssTemplate implements OssWithBucketTemplate {
 
 	@Override
 	@SneakyThrows
-	public FileInfo statFile(String bucketName, String fileName) {
+	public FileInfo getStatFile(String bucketName, String fileName) {
 		com.qiniu.storage.model.FileInfo stat = bucketManager.stat(getBucketName(bucketName), fileName);
 		FileInfo fileInfo = new FileInfo();
 		fileInfo.setFileName(StringUtils.isBlank(stat.key) ? fileName : stat.key);
-		fileInfo.setFileUrl(fileUrl(fileInfo.getFileName()));
+		fileInfo.setFileUrl(getFileFullUrl(fileInfo.getFileName()));
 		fileInfo.setHash(stat.hash);
 		fileInfo.setFileSize(stat.fsize);
 		//fileInfo.setUploadDate(new Date(stat.putTime / 10000));
@@ -103,22 +103,22 @@ public class QiniuOssTemplate implements OssWithBucketTemplate {
 	}
 
 	@Override
-	public FileInfo statFile(String fileName) {
-		return this.statFile(getBucketName(), fileName);
+	public FileInfo getStatFile(String fileName) {
+		return this.getStatFile(getBucketName(), fileName);
 	}
 
 	@Override
-	public String filePath(String bucketName, String fileName) {
+	public String getFileRelativePath(String bucketName, String fileName) {
 		return getBucketName(bucketName).concat("/").concat(fileName);
 	}
 
 	@Override
-	public String filePath(String fileName) {
+	public String getFileRelativePath(String fileName) {
 		return getBucketName().concat("/").concat(fileName);
 	}
 
 	@Override
-	public String fileUrl(String bucketName, String fileName) {
+	public String getFileFullUrl(String bucketName, String fileName) {
 		return endpoint.concat("/").concat(fileName);
 	}
 
@@ -142,7 +142,7 @@ public class QiniuOssTemplate implements OssWithBucketTemplate {
 	}
 
 	@Override
-	public String fileUrl(String fileName) {
+	public String getFileFullUrl(String fileName) {
 		return endpoint.concat("/").concat(fileName);
 	}
 
@@ -269,7 +269,7 @@ public class QiniuOssTemplate implements OssWithBucketTemplate {
 		FileInfo fileInfo = new FileInfo();
 		fileInfo.setFileName(key);
 		fileInfo.setOriginalName(key);
-		fileInfo.setFileUrl(fileUrl(key));
+		fileInfo.setFileUrl(getFileFullUrl(key));
 		//fileInfo.setFileSize();
 		//fileInfo.setUploadDate(new Date());
 		return fileInfo;

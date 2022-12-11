@@ -17,8 +17,10 @@ import java.util.UUID;
 @AllArgsConstructor
 public class DefaultOssRule implements OssRule {
 
+	/**
+	 * 前缀
+	 */
 	private String prefix;
-
 
 	@Override
 	public String bucketName(String bucketName) {
@@ -26,8 +28,7 @@ public class DefaultOssRule implements OssRule {
 	}
 
 	@Override
-	public String fileName(String originalFileName, OssFileNameFormatEnum format) {
-
+	public String setFileName(String originalFileName, OssFileNameFormatEnum format) {
 		StringBuilder builder = new StringBuilder();
 		builder.append(StringUtils.isBlank(prefix) ? "" : prefix);
 		if (format == OssFileNameFormatEnum.NONE) {
@@ -36,15 +37,7 @@ public class DefaultOssRule implements OssRule {
 			builder.append(UUID.randomUUID().toString().replace("-", ""));
 			builder.append("-");
 			builder.append(originalFileName);
-		}
-		// else if (format == OssFileNameFormatEnum.UUID) {
-		//     String[] split = StringUtils.split(originalFileName, ".");
-		//     builder.append(split[0]);
-		//     builder.append("-");
-		//     builder.append(UUID.randomUUID().toString().replace("-", ""));
-		//     builder.append("." + split[1]);
-		// }
-		else if (format == OssFileNameFormatEnum.DATE) {
+		} else if (format == OssFileNameFormatEnum.DATE) {
 			builder.append(LocalDateTime.now().format(DateTimeFormatter.ofPattern(OssFileNameFormatEnum.DATE.getDesc())));
 			builder.append("/");
 			builder.append(originalFileName);
@@ -61,8 +54,6 @@ public class DefaultOssRule implements OssRule {
 		} else {
 			builder.append(originalFileName);
 		}
-
-
 		return builder.toString();
 
 	}

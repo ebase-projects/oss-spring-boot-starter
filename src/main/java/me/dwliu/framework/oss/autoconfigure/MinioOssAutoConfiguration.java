@@ -4,9 +4,7 @@ import io.minio.MinioClient;
 import lombok.SneakyThrows;
 import me.dwliu.framework.oss.core.rule.OssRule;
 import me.dwliu.framework.oss.service.minio.MinioOssTemplate;
-import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -39,11 +37,11 @@ public class MinioOssAutoConfiguration {
 	@ConditionalOnBean({MinioClient.class, OssRule.class})
 	@ConditionalOnMissingBean(MinioOssTemplate.class)
 	@Bean
+	@SneakyThrows
 	public MinioOssTemplate minioOssTemplate(OssConfigProperties properties, OssRule ossRule) {
 		return new MinioOssTemplate(properties.getMinio().getEndpoint(),
 			properties.getMinio().getBucketName(),
 			minioClient(properties), ossRule);
 	}
-
 
 }
