@@ -16,16 +16,20 @@ public interface OssRule {
 	 * @param bucketName 存储桶名称
 	 * @return
 	 */
-	String bucketName(String bucketName);
+	default String bucketName(String bucketName) {
+		return bucketName;
+	}
 
 	/**
 	 * 获取文件名规则
 	 *
-	 * @param originalName 原始文件名称
+	 * @param originalFileName 原始文件名称
 	 * @param format       文件前缀格式
 	 * @return
 	 */
-	String setFileName(String originalName, OssFileNameFormatEnum format);
+	default String setFileName(String originalFileName, OssFileNameFormatEnum format) {
+		return originalFileName;
+	}
 
 
 }
