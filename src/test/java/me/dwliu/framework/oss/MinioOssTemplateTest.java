@@ -5,6 +5,7 @@ import me.dwliu.framework.oss.core.enums.OssFileNameFormatEnum;
 import me.dwliu.framework.oss.core.model.FileInfo;
 import me.dwliu.framework.oss.core.rule.OssRule;
 import me.dwliu.framework.oss.service.minio.MinioOssTemplate;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,85 +14,125 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.UUID;
 
-@SpringBootApplication(scanBasePackages = "me.dwliu.framework.oss")
+@SpringBootApplication
 @SpringBootTest
 @Slf4j
 public class MinioOssTemplateTest {
-
 	@Autowired
 	private MinioOssTemplate minioOssTemplate;
-
 	@Autowired
 	private OssRule ossRule;
-
-	//    private String bucketName = UUID.randomUUID().toString().replace("-", "");
 	private String bucketName = "101065";
-
 	private String fileName = "Koala.jpg";
-	//String fileName = "烟台一职数字化智慧校园一卡通项目招标文件定稿.doc";
 	private String filePath = "/Users/liudw/Pictures/" + fileName;
 
+	//public MinioOssTemplateTest(MinioOssTemplate minioOssTemplate, OssRule ossRule) {
+	//	this.minioOssTemplate = minioOssTemplate;
+	//	this.ossRule = ossRule;
+	//}
+
+	//@Value("${oss.minio.bucketName}")
+	//private String bucketNameByYml;
+
+	/**
+	 * 默认桶名称
+	 */
 	@Test
-	public void makeBucket() {
+	public void getBucketName() {
+		String res = minioOssTemplate.getBucketName();
+		// 断言返回的文本包含文件的内容
+		log.info("默认桶名称：{}", res);
+		Assertions.assertTrue(res.contains("default"));
+		//if (StringUtils.isBlank(bucketNameByYml)) {
+		//
+		//} else {
+		//	Assertions.assertTrue(res.contains(bucketNameByYml));
+		//}
+	}
+
+	/**
+	 * 自定义桶名称
+	 */
+	@Test
+	void testGetBucketName() {
+		String res = minioOssTemplate.getBucketName(bucketName);
+		log.info("自定义桶名称：{}", res);
+		// 断言返回的文本包含文件的内容
+		Assertions.assertTrue(res.contains(bucketName));
+
+	}
+
+	@Test
+	void makeBucket() {
+		String bucketName = "bucket";
 		minioOssTemplate.makeBucket(bucketName);
+		String res = minioOssTemplate.getBucketName(bucketName);
+		// 断言返回的文本包含文件的内容
+		Assertions.assertTrue(res.contains(bucketName));
 	}
 
 	@Test
-	public void removeBucket() {
-		minioOssTemplate.removeBucket(bucketName);
-	}
-
-	@Test
-	public void bucketExists() {
+	void removeBucket() {
+		String bucketName = UUID.randomUUID().toString().replace("-", "");
+		minioOssTemplate.makeBucket(bucketName);
 		boolean b = minioOssTemplate.bucketExists(bucketName);
-		log.info("bucketExists:「{}」", b);
+		Assertions.assertTrue(b);
+		minioOssTemplate.removeBucket(bucketName);
+		b = minioOssTemplate.bucketExists(bucketName);
+		Assertions.assertFalse(b);
+
 	}
 
 	@Test
-	public void copyFile() {
+	void bucketExists() {
+		String bucketName = UUID.randomUUID().toString().replace("-", "");
+		minioOssTemplate.makeBucket(bucketName);
+		boolean b = minioOssTemplate.bucketExists(bucketName);
+		Assertions.assertTrue(b);
+		minioOssTemplate.removeBucket(bucketName);
+		b = minioOssTemplate.bucketExists(bucketName);
+		Assertions.assertFalse(b);
+	}
+
+	//@Test
+	//void copyFile() {
+	//	minioOssTemplate.copyFile(bucketName, fileName, "default");
+	//}
+
+	//@Test
+	//void testCopyFile() {
+	//}
+
+	@Test
+	void getStatFile() {
+		FileInfo statFile = minioOssTemplate.getStatFile(bucketName, fileName);
+		log.info("{}", statFile);
 	}
 
 	@Test
-	public void copyFile1() {
+	void testGetStatFile() {
 	}
 
 	@Test
-	public void statFile() {
+	void getFileRelativePath() {
 	}
 
 	@Test
-	public void statFile1() {
+	void testGetFileRelativePath() {
 	}
 
 	@Test
-	public void filePath() {
-		String s = minioOssTemplate.getFileRelativePath(fileName);
-		log.info(s);
+	void getFileFullUrl() {
 	}
 
 	@Test
-	public void filePath1() {
-	}
-
-	@Test
-	public void fileUrl() {
-		String s = minioOssTemplate.getFileFullUrl(fileName);
-		log.info(s);
-	}
-
-	@Test
-	public void fileUrl1() {
+	void testGetFileFullUrl() {
 	}
 
 	@Test
 	public void putFile() throws FileNotFoundException {
-//        String fileName = "Lighthouse.jpg";
-//        String fileName = "烟台一职数字化智慧校园一卡通项目招标文件定稿.doc";
-//        String filePath = "/Users/liudw/Downloads/" + fileName;
-//        String filePath = "/Users/liudw/Pictures/" + fileName;
-
-//        minioClient.putObject(bucketName, fileName, filePath);
 
 		File file = new File(filePath);
 		FileInputStream fileInputStream = new FileInputStream(file);
@@ -116,36 +157,53 @@ public class MinioOssTemplateTest {
 		File file = new File(filePath);
 		FileInputStream fileInputStream = new FileInputStream(file);
 		String originFileName = this.fileName;
-		// String fileName = ossRule.fileName(this.fileName, OssFileNameFormatEnum.DATETIME);
-		String fileName = ossRule.setFileName(this.fileName, OssFileNameFormatEnum.DATE);
+		String fileName = ossRule.setFileName(this.fileName, OssFileNameFormatEnum.CUSTOM);
 
 		FileInfo fileInfo = minioOssTemplate.putFile(bucketName, originFileName, fileName, fileInputStream);
 		log.info(fileInfo.toString());
 	}
 
 	@Test
-	public void putFile3() {
+	void testPutFile2() {
 	}
 
 	@Test
-	public void putFile4() {
+	void testPutFile3() {
 	}
 
 	@Test
-	public void removeFile() {
-		minioOssTemplate.removeFile(fileName);
+	void testPutFile4() {
 	}
 
 	@Test
-	public void removeFile1() {
+	void testPutFile5() {
 	}
 
 	@Test
-	public void removeFiles() {
+	void testPutFile6() {
 	}
 
 	@Test
-	public void removeFiles1() {
+	void testPutFile7() {
 	}
 
+	@Test
+	void removeFile() {
+	}
+
+	@Test
+	void testRemoveFile() {
+	}
+
+	@Test
+	void removeFiles() {
+	}
+
+	@Test
+	void testRemoveFiles() {
+	}
+
+	@Test
+	void getPolicyType() {
+	}
 }
