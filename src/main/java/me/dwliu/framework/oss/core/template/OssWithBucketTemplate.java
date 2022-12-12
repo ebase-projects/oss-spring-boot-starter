@@ -51,24 +51,24 @@ public interface OssWithBucketTemplate extends OssTemplate {
 	 */
 	boolean bucketExists(String bucketName);
 
-	/**
-	 * 拷贝文件
-	 *
-	 * @param bucketName     存储桶名称
-	 * @param fileName       存储桶文件名称
-	 * @param destBucketName 目标存储桶名称
-	 */
-	void copyFile(String bucketName, String fileName, String destBucketName);
+	///**
+	// * 拷贝文件
+	// *
+	// * @param bucketName     存储桶名称
+	// * @param fileName       存储桶文件名称
+	// * @param destBucketName 目标存储桶名称
+	// */
+	//void copyFile(String bucketName, String fileName, String destBucketName);
 
-	/**
-	 * 拷贝文件
-	 *
-	 * @param bucketName     存储桶名称
-	 * @param fileName       存储桶文件名称
-	 * @param destBucketName 目标存储桶名称
-	 * @param destFileName   目标存储桶文件名称
-	 */
-	void copyFile(String bucketName, String fileName, String destBucketName, String destFileName);
+	///**
+	// * 拷贝文件
+	// *
+	// * @param bucketName     存储桶名称
+	// * @param fileName       存储桶文件名称
+	// * @param destBucketName 目标存储桶名称
+	// * @param destFileName   目标存储桶文件名称
+	// */
+	//void copyFile(String bucketName, String fileName, String destBucketName, String destFileName);
 
 
 	/**

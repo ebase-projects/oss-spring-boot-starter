@@ -76,17 +76,17 @@ public class QiniuOssTemplate implements OssWithBucketTemplate {
 		return false;
 	}
 
-	@Override
-	@SneakyThrows
-	public void copyFile(String bucketName, String fileName, String destBucketName) {
-		bucketManager.copy(getBucketName(bucketName), fileName, getBucketName(destBucketName), fileName);
-	}
+	//@Override
+	//@SneakyThrows
+	//public void copyFile(String bucketName, String fileName, String destBucketName) {
+	//	bucketManager.copy(getBucketName(bucketName), fileName, getBucketName(destBucketName), fileName);
+	//}
 
-	@Override
-	@SneakyThrows
-	public void copyFile(String bucketName, String fileName, String destBucketName, String destFileName) {
-		bucketManager.copy(getBucketName(bucketName), fileName, getBucketName(destBucketName), destFileName);
-	}
+	//@Override
+	//@SneakyThrows
+	//public void copyFile(String bucketName, String fileName, String destBucketName, String destFileName) {
+	//	bucketManager.copy(getBucketName(bucketName), fileName, getBucketName(destBucketName), destFileName);
+	//}
 
 	@Override
 	@SneakyThrows

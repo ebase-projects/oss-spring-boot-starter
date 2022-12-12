@@ -50,15 +50,15 @@ public class AliyunOssTemplate implements OssWithBucketTemplate {
 		return b;
 	}
 
-	@Override
-	public void copyFile(String bucketName, String fileName, String destBucketName) {
-		ossClient.copyObject(getBucketName(bucketName), fileName, destBucketName, fileName);
-	}
+	//@Override
+	//public void copyFile(String bucketName, String fileName, String destBucketName) {
+	//	ossClient.copyObject(getBucketName(bucketName), fileName, destBucketName, fileName);
+	//}
 
-	@Override
-	public void copyFile(String bucketName, String fileName, String destBucketName, String destFileName) {
-		ossClient.copyObject(getBucketName(bucketName), fileName, destBucketName, destFileName);
-	}
+	//@Override
+	//public void copyFile(String bucketName, String fileName, String destBucketName, String destFileName) {
+	//	ossClient.copyObject(getBucketName(bucketName), fileName, destBucketName, destFileName);
+	//}
 
 	@Override
 	public FileInfo getStatFile(String bucketName, String fileName) {
